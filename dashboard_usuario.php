@@ -1,157 +1,158 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<?php
+include('config.php');
+session_start();
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="./css/main.css">
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: login.php');
+    exit();
+}
 
-    <title>Aseguradora de autos</title>
-  </head>
-  <body>
-  <!--========================================================== -->
-                        <!-- ENCABEZADO -->
-  <!--========================================================== -->
-    <header class="container-fluid bg-primary d-flex justify-content-center">
-        <p class="text-light mb-0 p-2 fs-6">Contactanos 1-(305)-725-1000</p>
-    </header>
+$usuario_id = $_SESSION['usuario_id'];
+$query = "SELECT rol FROM usuarios WHERE id='$usuario_id' LIMIT 1";
+$result = mysqli_query($conn, $query);
+$usuario = mysqli_fetch_assoc($result);
 
-    <nav  class="navbar navbar-expand-lg navbar-light p-3"  id="menu">
-        <div class="container">
-          <a class="navbar-brand" href="#">
-              <span class="fs-5 text-primary fw-bold">Seguro de Autos</span>
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+if ($usuario['rol'] !== 'usuario') {
+    header('Location: dashboard_admin.php');
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard del Usuario</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<style type="text/css">
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header, main, footer {
+  padding: 20px;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+nav li {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+section {
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+button {
+  cursor: pointer;
+}
+
+footer {
+  background-color: #f2f2f2;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Estilos para testimonios */
+.testimonial {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.testimonial p {
+  margin: 0;
+}
+
+.testimonial em {
+  font-style: italic;
+}
+
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Seguro Autos</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#">Inicio</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#equipo">Cotización de Autos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#seccion-contacto">Contactos</a>
-              </li>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Cerrar sesión</a>
+                </li>
             </ul>
-            <form class="d-flex">
-              <input class="form-control me-2" type="email" placeholder="Correo Electronico" aria-label="Suscribete">
-              <button class="btn btn-primary btn-primary-outline-success" type="button">Close</button>
-            </form>
-          </div>
-
         </div>
-      </nav>
+    </nav>
 
-    <!--========================================================== -->
-                        <!-- SLIDER DE IMAGENES-->
-    <!--========================================================== -->
-   
-    <div id="carousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-          <div class="carousel-item active" data-bs-interval="3000">
-            <img src="./img/slide1.jpg" class="d-block w-100" alt="">
-          </div>
-          
- 
-          <div class="carousel-item" data-bs-interval="3000">
-            <img src="./img/slide2.jpg" class="d-block w-100" alt="...">
-          </div>
- 
-
-          <div class="carousel-item" data-bs-interval="3000">
-            <img src="./img/slide3.jpg" class="d-block w-100" alt="...">
-          </div>
- 
- 
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carousel"  data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carousel"  data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      </div>    
-    
-        
-     
-    <!--========================================================== -->
-                        <!-- INTRODUCCION DE SERVICIOS-->
-    <!--========================================================== -->
-
-
-    <section class="d-flex flex-column justify-content-center align-items-center pt-5  text-center w-50 m-auto" id="intro">
-    <h1 class="p-3 fs-2 border-top border-3">Una agencia única para todas tus necesidades de <span class="text-primary">Aseguradora de Autos<span/></h1>
-     <p class="p-3  fs-4">
-         <span class="text-primary">Seguros de autos</span> es la agencia donde te ayudamos a selelccionar que seguro de auto es el que mejor te favorece
-     </p>   
-    </section>
-
-   <!--========================================================== -->
-                        <!-- TIPOS DE SERVICIOS-->
-    <!--========================================================== -->
-
-
-<section class="w-100">
-    <div class="row w-75 mx-auto" id="servicios-fila-1">       
-        <div class="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-start my-5 icono-wrap">
-            <img src="./img/desarrollo.png" alt="desarrollo"   width="180" height="160">
-
-            <div>
-                <h3 class="fs-5 mt-4 px-4 pb-1">Responsabilidad Civil</h3>
-                <p class="px-4">Cobertura básica para daños a terceros.</p>
-            </div>
-
-        </div>
-
-        <div class="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-start  my-5 icono-wrap">
-            <img src="./img/concepto.png" alt="concepto" width="180" height="160">
-
-            <div>
-                <h3 class="fs-5 mt-4 px-4 pb-1 icono-wrap">Cobertura contra Daños Propios: </h3>
-                <p class="px-4">Cubre los daños a tu vehículo en caso de accidente.</p>
-            </div>
-        </div>   
-    </div>
-    
-    <div class="row w-75 mx-auto mb-5" id="servicios-fila-2">       
-        <div class="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-start  my-5 icono-wrap">
-            <img src="./img/comunicaciones.png" alt="comunicaciones" width="180" height="160">
-
-            <div>
-                <h3 class="fs-5 mt-4 px-4 pb-1">Cobertura contra Robo:</h3>
-                <p class="px-4">Protege tu auto ante el robo o hurto.</p>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Bienvenido Usuario</h1>
+                <!-- Aquí puedes agregar contenido específico para el usuario -->
             </div>
         </div>
+        <!DOCTYPE html>
+<html>
+<head>
+  <title>Aseguradora de Autos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Bienvenido a nuestra aseguradora de autos</h1>
+    <nav>
+      <ul>
+        <li><a href="#cotizacion">Cotización</a></li>
+        <li><a href="#tipos-seguros">Tipos de Seguros</a></li>
+        <li><a href="#descuentos">Descuentos</a></li>
+        <li><a href="#testimonios">Testimonios</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
 
-        <div class="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-start my-5 icono-wrap">
-            <img src="./img/seo.png" alt="seo" width="180" height="160" >
-
-            <div>
-                <h3 class="fs-5 mt-4 px-4 pb-1">Cobertura de Daños a Terceros Ampliada</h3>
-                <p class="px-4">Amplía la responsabilidad civil a daños materiales y lesiones.</p>
-            </div>
-        </div>   
-    </div>
-</section>
-
-<!--========================================================== -->
-                        <!-- SECCION ACERCA DE NOSOTROS-->
-<!--========================================================== -->
-
-<section>
-    <div class="container w-50 m-auto text-center" id="equipo">
-        <h1 class="mb-5 fs-2">Cotizacion de  <span class="text-primary">Seguros de Autos</span>.</h1>
-        <p>Completa el siguiente formulario para obtener una cotización personalizada:</p>
+  <main>
+    <section id="cotizacion">
+      <h2>Cotización de Seguro de Auto</h2>
+      <p>Completa el siguiente formulario para obtener una cotización personalizada:</p>
       <form>
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" required>
@@ -166,104 +167,76 @@
         
         <button type="submit" class="btn btn-primary">Obtener Cotización</button>
       </form>
-    </div>
+    </section>
 
-    
+    <section id="tipos-seguros">
+      <h2>Tipos de Seguros de Auto</h2>
+      <p>Descubre nuestras diferentes opciones de cobertura:</p>
+      <ul>
+        <li>Responsabilidad Civil: Cobertura básica para daños a terceros.</li>
+        <li>Cobertura contra Daños Propios: Cubre los daños a tu vehículo en caso de accidente.</li>
+        <li>Cobertura contra Robo: Protege tu auto ante el robo o hurto.</li>
+        <li>Cobertura de Daños a Terceros Ampliada: Amplía la responsabilidad civil a daños materiales y lesiones.</li>
+        <!-- Otros tipos de seguros disponibles -->
+      </ul>
+    </section>
 
-    <div id="local" class="border-top border-2">
-        <div class="mapa"> </div>
-        <div>
-            <div class="wrapper-local">
-                <h2>Clientes</h2>
-                
-                <p class="fs-5 text-body">Comentarios de los clientes acerca de esta aseguradora de automoviles</p>
-                <section class="d-flex justify-content-start" id="numeros-local">
-                    <div>
-                        <p class="text-primary fs-5">- Juan Pérez</p>
-                        <p>"Estoy muy satisfecho con el servicio de la aseguradora. Resolvieron mi reclamación rápidamente y sin complicaciones.</p>
-                    </div>
-                    <div>
-                      <p class="text-primary fs-5">- María Gómez</p>
-                      <p>"La cobertura contra robo me ha salvado en dos ocasiones. Recomiendo esta aseguradora a todos mis amigos."</p>
-                  </div>
-                       
-                    </div>
-              </section>
-            </div>
+    <section id="descuentos">
+      <h2>Descuentos y Promociones</h2>
+      <p>Aprovecha nuestros descuentos para ahorrar en tu seguro de auto:</p>
+      <ul>
+        <li>Descuento por Buen Conductor: Si no has tenido accidentes en los últimos años.</li>
+        <li>Descuento por Pólizas Múltiples: Si aseguras más de un vehículo con nosotros.</li>
+        <li>Descuento por Pago Anual: Obtén un descuento adicional al pagar tu póliza anualmente.</li>
+        <!-- Otros descuentos disponibles -->
+      </ul>
+    </section>
+
+    <section id="testimonios">
+      <h2>Testimonios de Clientes</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="testimonial">
+            <p>"Estoy muy satisfecho con el servicio de la aseguradora. Resolvieron mi reclamación rápidamente y sin complicaciones."</p>
+            <p><em>- Juan Pérez</em></p>
+          </div>
         </div>
+        <div class="col-md-6">
+          <div class="testimonial">
+            <p>"La cobertura contra robo me ha salvado en dos ocasiones. Recomiendo esta aseguradora a todos mis amigos."</p>
+            <p><em>- María Gómez</em></p>
+          </div>
+        </div>
+      </div>
+      <!-- Otros testimonios de clientes -->
+    </section>
+
+    <section id="conversor">
+      <h2>Conversor de Dólar a Peso</h2>
+      <p>Ingresa el monto en dólares para convertirlo a pesos:</p>
+      <label for="monto-dolar">Monto en Dólar:</label>
+      <input type="number" id="monto-dolar" min="0" step="0.01" required>
+      <button type="button" class="btn btn-primary" onclick="convertirADolar()">Convertir</button>
+      <p id="resultado-conversion"></p>
+    </section>
+
+    <section id="reloj">
+      <h2>Reloj en tiempo real</h2>
+      <p id="hora-actual"></p>
+    </section>
+  </main>
+
+  <footer id="contacto">
+    <p>Contacto: 1-800-SEG-AUTO | Correo: info@aseguradoradeautos.com</p>
+  </footer>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
+
     </div>
 
-</section>
-
-
-<!--========================================================== -->
-                        <!-- SECCION CONTACTOS-->
-<!--========================================================== -->
-
-<section id="seccion-contacto" class="border-bottom border-secondary border-2">
-  <div id="bg-contactos">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#1b2a4e" fill-opacity="1" d="M0,32L120,42.7C240,53,480,75,720,74.7C960,75,1200,53,1320,42.7L1440,32L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"></path></svg>
-  </div>
-
-
-<!--========================================================== -->
-                      <!-- CONTENEDOR DEL FORMULARIO -->
-<!--========================================================== -->
-
-  <div class="container  border-top border-primary " style="max-width: 500px" id="contenedor-formulario">
-      <div class="text-center mb-4" id="titulo-formulario">
-        <div><img src="./img/support.png" alt="" class="img-fluid ps-5"></div>
-        <h2>Contactanos</h2>
-        <p class="fs-5">Estamos aqui para hacer realidad de tus proyectos</p>
-      </div>
-
-     
-
-      <form   method="POST" data-netlify="true" action="#">     
-            <div class= "mb-3">           
-              <input type="email" class="form-control" id="email" name="email" placeholder="nombre@ejemplo.com">
-            </div>
- 
-          
-            <div class="mb-3">            
-              <input type="input" class="form-control" id="name" name="name" placeholder="John Doe">
-            </div>
-      
-
-            <div class="mb-3">
-              <input type="tel" class="form-control" name="phone" id="phone" placeholder="Teléfono">
-            </div>
-
-          <div class="mb-3">       
-            <textarea class="form-control" name="message" id="message" rows="4"></textarea>
-          </div>
-
-          <div class="mb-3">
-            <button type="submit" class=" btn btn-primary w-100 fs-5">Enviar Mensaje</button>
-          </div>
-      </form>
-  
-  </div>
-</section>
-
-
-<!--========================================================== -->
-                        <!--FOOTER-->
-<!--========================================================== -->
-
-
-<footer class="w-100  d-flex  align-items-center justify-content-center flex-wrap">
-  <p class="fs-5 px-3  pt-3">Aseguradora de Autos &copy; Todos Los Derechos Reservados 2023</p>
-  <div id="iconos" >
-      <a href="#"><i class="bi bi-facebook"></i></a>
-      <a href="#"><i class="bi bi-twitter"></i></a>
-      <a href="#"><i class="bi bi-instagram"></i></a>  
-  </div>
-</footer>
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script> 
-    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
-    <script src="main.js"></script>
-  </body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>
